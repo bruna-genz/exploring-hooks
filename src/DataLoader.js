@@ -1,26 +1,24 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
-export default class DataLoader extends Component {
-  state = { data: [] };
+const DataLoader = () => {
+  const [data, setData] = useState([])
 
-  componentDidMount() {
+  useEffect(() => {
     fetch('https://quotes-api-bruna.herokuapp.com/quotes')
-    .then(response => response.json())
-    .then(data => 
-      this.setState(() => {
-        return { data }
-      }))
-  }
+      .then(response => response.json())
+      .then(data => setData(data))
+  }, []) // super important array, it constains the dependencies for useEffect, 
+         // when it's empty, the effect runs only once
 
-  render() {
-    return (
-      <div>
-        <ul>
-          {this.state.data.map(el => (
-            <li key={el.id}>{el.quote}</li>
-          ))}
-        </ul>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <ul>
+        {data.map(el => (
+          <li key={el.id}>{el.quote}</li>
+        ))}
+      </ul>
+    </div>
+  )
 }
+
+export default DataLoader;
